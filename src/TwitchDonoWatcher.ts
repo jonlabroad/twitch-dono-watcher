@@ -1,6 +1,7 @@
 import * as tmi from "tmi.js"
 import DonoTracker from "./DonoTracker";
 import HoagieDbClient from "./HoagieDbClient";
+import StreamElements from "./StreamElements";
 import TwitchClient from "./TwitchClient";
 
 export default class TwitchDonoWatcher {
@@ -42,15 +43,17 @@ export default class TwitchDonoWatcher {
             if (userstate["display-name"]?.toLowerCase() === "streamlabs") {
                 if (message.includes("$")) {
                     try {
+                        const regex = StreamElements.getDonoRegex(channel);
                         console.log({ message });
-                        const matches = message.match(/. (?<username>.+) just tipped \$(?<amount>.+)\!/);
-                        // HoagieMan5000 just tipped $130.30 THANK YOU :green_heart: :dizzy:
-                        // songery
-                        const username = matches?.groups?.username;
-                        const amount = matches?.groups?.amount;
-                        const channelName = channel.toLowerCase().replace("#", "");
-                        if (username && amount) {
-                            self.donoTracker.handleDono(channelName, self.streamInfo[channelName], username, amount);
+                        if (regex) {
+                            const matches = message.match(regex);
+
+                            const username = matches?.groups?.username;
+                            const amount = matches?.groups?.amount;
+                            const channelName = channel.toLowerCase().replace("#", "");
+                            if (username && amount) {
+                                self.donoTracker.handleDono(channelName, self.streamInfo[channelName], username, amount);
+                            }
                         }
                     } catch (err) {
                         console.error(err);
