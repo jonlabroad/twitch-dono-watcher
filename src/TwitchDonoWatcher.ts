@@ -1,5 +1,6 @@
 import * as tmi from "tmi.js"
 import DonoTracker from "./DonoTracker";
+import HoagieClient from "./HoagieClient";
 import HoagieDbClient from "./HoagieDbClient";
 import StreamElements from "./StreamElements";
 import TwitchClient from "./TwitchClient";
@@ -10,7 +11,8 @@ export default class TwitchDonoWatcher {
     twitchClient = new TwitchClient();
     streamInfo: Record<string, any> = {};
     hoagieDbClients: Record<string, HoagieDbClient> = {};
-    donoTracker: DonoTracker = new DonoTracker(this.hoagieDbClients);
+    hoagieClients: Record<string, HoagieClient> = {};
+    donoTracker: DonoTracker = new DonoTracker(this.hoagieClients);
     historyWritten = new Set<string>();
 
     constructor(channels: string[]) {
@@ -26,11 +28,13 @@ export default class TwitchDonoWatcher {
             streamInfo.forEach((info, i) => {
                 this.streamInfo[this.channels[i].toLowerCase()] = info;
                 if (info) {
-                    const client = new HoagieDbClient(this.channels[i]);
-                    this.hoagieDbClients[this.channels[i].toLowerCase()] = client;
+                    const dbClient = new HoagieDbClient(this.channels[i]);
+                    this.hoagieDbClients[this.channels[i].toLowerCase()] = dbClient;
+                    const client = new HoagieClient(this.channels[i]);
+                    this.hoagieClients[this.channels[i].toLowerCase()] = client;
                     if (!this.historyWritten.has(info.id)) {
                         console.log(info.id);
-                        client.setStreamHistory(info.id)
+                        dbClient.setStreamHistory(info.id)
                         this.historyWritten.add(info.id);
                     }
                 }
