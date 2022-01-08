@@ -1,5 +1,5 @@
 import { DynamoDBClient, UpdateItemCommand, UpdateItemInput } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, UpdateCommand, UpdateCommandInput } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 export default class HoagieDbClient {
     tableName = "HoagieTools-prod";

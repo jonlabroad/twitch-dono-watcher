@@ -39,8 +39,8 @@ export default class TwitchDonoWatcher {
 
         const self = this;
         this.client.on("message", (channel, userstate, message, selfBool) => {
-            // Look for streamlabs dono messages (different for all channels)
-            if (userstate["display-name"]?.toLowerCase() === "streamlabs") {
+            // Look for streamlabs/streamelements dono messages (different for all channels)
+            if (userstate["display-name"]?.toLowerCase() === "streamlabs" || userstate["display-name"]?.toLowerCase() === "streamelements") {
                 if (message.includes("$")) {
                     try {
                         const regex = StreamElements.getDonoRegex(channel);
