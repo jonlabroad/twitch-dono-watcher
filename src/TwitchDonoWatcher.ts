@@ -2,7 +2,7 @@ import * as tmi from "tmi.js"
 import DonoTracker from "./DonoTracker";
 import HoagieClient from "./HoagieClient";
 import HoagieDbClient from "./HoagieDbClient";
-import Secrets from "./secrets";
+import Secrets from "./Secrets";
 import StreamElements from "./StreamElements";
 import TwitchClient from "./TwitchClient";
 

@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import NodeCache from "node-cache";
 import Config from "./Config";
-import Secrets from "./secrets";
+import Secrets from "./Secrets";
 import { ChannelData, DataResponse, Game, LiveChannelData, Paginated, StreamData, UserData, UserFollows, UsersFollows, UserSubscriptions } from "./TwitchClientTypes";
 
 export interface ValidatedSession {
