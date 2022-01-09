@@ -2,6 +2,7 @@ import * as tmi from "tmi.js"
 import DonoTracker from "./DonoTracker";
 import HoagieClient from "./HoagieClient";
 import HoagieDbClient from "./HoagieDbClient";
+import Secrets from "./secrets";
 import StreamElements from "./StreamElements";
 import TwitchClient from "./TwitchClient";
 
@@ -23,6 +24,8 @@ export default class TwitchDonoWatcher {
     }
 
     public async run() {
+        await Secrets.init();
+
         setInterval(async () => {
             const streamInfo = await Promise.all(this.channels.map(channel => this.twitchClient.getUserStream(channel)));
             streamInfo.forEach((info, i) => {
