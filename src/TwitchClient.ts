@@ -38,9 +38,13 @@ export default class TwitchClient {
     }
 
     async getUserStream(username: string): Promise<any> {
-        await this.getAuthToken();
-        const data = await this.getRequest(`https://api.twitch.tv/helix/streams?user_login=${username}`, false);
-        return data.data[0];
+        try {
+            await this.getAuthToken();
+            const data = await this.getRequest(`https://api.twitch.tv/helix/streams?user_login=${username}`, false);
+            return data.data[0];
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     async getUserSubscriptions(broadcasterId: string, userId: string): Promise<UserSubscriptions[]> {
