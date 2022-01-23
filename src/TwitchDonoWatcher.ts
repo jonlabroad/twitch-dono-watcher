@@ -25,6 +25,12 @@ export default class TwitchDonoWatcher {
 
     public async run() {
         await Secrets.init();
+        const config = await (new HoagieDbClient("n/a").getConfig());
+        this.channels = config?.streamers ?? [];
+        console.log(this.channels);
+        this.client = new tmi.Client({
+            channels: [...this.channels]
+        });
 
         setInterval(async () => {
             const streamInfo = await Promise.all(this.channels.map(channel => this.twitchClient.getUserStream(channel)));

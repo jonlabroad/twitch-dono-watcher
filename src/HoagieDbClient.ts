@@ -1,5 +1,12 @@
-import { DynamoDBClient, UpdateItemCommand, UpdateItemInput } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient, GetItemCommand, GetItemCommandInput, GetItemInput, ReplicaGlobalSecondaryIndexSettingsDescription, UpdateItemCommand, UpdateItemInput } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, GetCommandInput, UpdateCommand, UpdateCommandInput } from "@aws-sdk/lib-dynamodb";
+
+export interface AdminData {
+    CategoryKey: string
+    SubKey: string
+
+    streamers: string[]
+}
 
 export default class HoagieDbClient {
     tableName = "HoagieTools-prod";
@@ -15,10 +22,10 @@ export default class HoagieDbClient {
         try {
             const date = new Date();
             const key = {
-                CategoryKey: { S: `DonoWatch_${this.channel}_streamhistory` },
-                SubKey: { S: streamId },
+                CategoryKey: `DonoWatch_${this.channel}_streamhistory`,
+                SubKey: streamId,
             };
-            const input: UpdateItemInput = {
+            const input: UpdateCommandInput = {
                 TableName: this.tableName,
                 Key: key,
                 UpdateExpression: "SET #timestamp = if_not_exists(#timestamp, :timestamp)",
@@ -27,7 +34,24 @@ export default class HoagieDbClient {
                     ":timestamp": { S: date.toISOString() },
                 }
             }
-            await this.dbClient.send(new UpdateItemCommand(input));
+            await this.dbClient.send(new UpdateCommand(input));
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    public async getConfig() {
+        try {
+            const key = {
+                CategoryKey: `DonoWatch_admin`,
+                SubKey: "config",
+            };
+            const input: GetCommandInput = {
+                TableName: this.tableName,
+                Key: key,
+            }
+            const response = await this.docClient.send(new GetCommand(input));
+            return response?.Item as AdminData | undefined;
         } catch (err) {
             console.error(err);
         }
