@@ -21,7 +21,7 @@ export default class TwitchDonoWatcher {
     public async run() {
         await Secrets.init();
         const config = await (new HoagieDbClient("n/a").getConfig());
-        this.channels = config?.streamers ?? [];
+        this.channels = Array.from(config?.streamers.values() ?? []);
         console.log(this.channels);
         const client = new tmi.Client({
             channels: [...this.channels]
