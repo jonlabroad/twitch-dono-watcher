@@ -1,4 +1,4 @@
-import { DynamoDBClient, GetItemCommand, GetItemCommandInput, GetItemInput, ReplicaGlobalSecondaryIndexSettingsDescription, UpdateItemCommand, UpdateItemInput } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, GetCommand, GetCommandInput, UpdateCommand, UpdateCommandInput } from "@aws-sdk/lib-dynamodb";
 
 export interface AdminData {
@@ -31,9 +31,10 @@ export default class HoagieDbClient {
                 UpdateExpression: "SET #timestamp = if_not_exists(#timestamp, :timestamp)",
                 ExpressionAttributeNames: { "#timestamp": "timestamp" },
                 ExpressionAttributeValues: {
-                    ":timestamp": { S: date.toISOString() },
+                    ":timestamp": date.toISOString()
                 }
             }
+            console.log({input});
             await this.dbClient.send(new UpdateCommand(input));
         } catch (err) {
             console.error(err);

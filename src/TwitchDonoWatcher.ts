@@ -37,7 +37,7 @@ export default class TwitchDonoWatcher {
                     const client = new HoagieClient(this.channels[i]);
                     this.hoagieClients[this.channels[i].toLowerCase()] = client;
                     if (!this.historyWritten.has(info.id)) {
-                        console.log(info.id);
+                        console.log({newStream: info.id});
                         dbClient.setStreamHistory(info.id)
                         this.historyWritten.add(info.id);
                     }
