@@ -1,6 +1,14 @@
 import * as tmi from "tmi.js"
 import HoagieClient from "./HoagieClient";
 
+export type SubMethod = "1000" | "2000" | "3000";
+export type Tier = 1 | 2 | 3;
+const subMethodToTier: Record<string, number> = {
+    "1000": 1,
+    "2000": 2,
+    "3000": 3,
+}
+
 export default class DonoTracker {
     hoagieClients: Record<string, HoagieClient>;
 
@@ -26,17 +34,17 @@ export default class DonoTracker {
         }
     }
 
-    public handleSub(channel: string, streamInfo: any, username: string) {
+    public handleSub(channel: string, streamInfo: any, username: string, method: tmi.SubMethod) {
         const client = this.hoagieClients[channel.toLowerCase()];
         if (client && streamInfo) {
-            client.addDono(username.toLowerCase(), "sub", 1)
+            client.addDono(username.toLowerCase(), "sub", 1, subMethodToTier[method])
         } 
     }
 
-    public handleSubGifts(channel: string, streamInfo: any, username: string) {
+    public handleSubGifts(channel: string, streamInfo: any, username: string, method: tmi.SubMethod) {
         const client = this.hoagieClients[channel.toLowerCase()];
         if (client && streamInfo) {
-            client.addDono(username.toLowerCase(), "subgift", 1)
+            client.addDono(username.toLowerCase(), "subgift", 1, subMethodToTier[method])
         } 
     }
 }

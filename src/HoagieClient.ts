@@ -5,6 +5,7 @@ export interface SetDonoRequest {
     userLogin: string
     type: "cheer" | "dono" | "sub" | "subgift"
     amount: number
+    tier?: number
 }
 
 export default class HoagieClient {
@@ -15,14 +16,17 @@ export default class HoagieClient {
         this.channel = channel;
     }
 
-    public async addDono(username: string, type: "cheer" | "dono" | "sub" | "subgift", amount: number) {
+    public async addDono(username: string, type: "cheer" | "dono" | "sub" | "subgift", amount: number, subTier?: number) {
         try {
-            const body = {
+            const body: SetDonoRequest = {
                 streamerLogin: this.channel,
                 userLogin: username,
                 type,
                 amount,
             };
+            if (subTier) {
+                body.tier = subTier;
+            }
             const url = `${this.BASE_URL}adddono`;
             console.log(url);
             console.log(body);

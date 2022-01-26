@@ -84,19 +84,19 @@ export default class TwitchDonoWatcher {
         client.on("subscription", (channel, username, methods, message, userstate) => {
             console.log({ type: "subscription", username, message, methods });
             const channelName = channel.toLowerCase().replace("#", "");
-            self.donoTracker.handleSub(channelName, self.streamInfo[channelName], username);
+            self.donoTracker.handleSub(channelName, self.streamInfo[channelName], username, methods?.plan ?? "1000");
         })
 
         client.on("resub", (channel, username, method, message, userstate, methods) => {
             console.log({ type: "subscription", username, message, method, methods });
             const channelName = channel.toLowerCase().replace("#", "");
-            self.donoTracker.handleSub(channelName, self.streamInfo[channelName], username);
+            self.donoTracker.handleSub(channelName, self.streamInfo[channelName], username, methods?.plan ?? "1000");
         })
 
         client.on("subgift", (channel, username, method, message, userstate, methods) => {
             console.log({ type: "subgift", username, message, method, methods });
             const channelName = channel.toLowerCase().replace("#", "");
-            self.donoTracker.handleSubGifts(channelName, self.streamInfo[channelName], username);
+            self.donoTracker.handleSubGifts(channelName, self.streamInfo[channelName], username, methods?.plan ?? "1000");
         })
 
         client.on("connected", (address, port) => {
