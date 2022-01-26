@@ -88,13 +88,13 @@ export default class TwitchDonoWatcher {
         })
 
         client.on("resub", (channel, username, method, message, userstate, methods) => {
-            console.log({ type: "subscription", username, message, method, methods });
+            console.log({ type: "subscription", username, message, method, plan: methods.plan });
             const channelName = channel.toLowerCase().replace("#", "");
             self.donoTracker.handleSub(channelName, self.streamInfo[channelName], username, methods?.plan ?? "1000");
         })
 
         client.on("subgift", (channel, username, method, message, userstate, methods) => {
-            console.log({ type: "subgift", username, message, method, methods });
+            console.log({ type: "subgift", username, message, method, methods, plan: methods.plan });
             const channelName = channel.toLowerCase().replace("#", "");
             self.donoTracker.handleSubGifts(channelName, self.streamInfo[channelName], username, methods?.plan ?? "1000");
         })
