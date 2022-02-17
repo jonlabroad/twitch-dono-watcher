@@ -19,7 +19,7 @@ export default class DonoTracker {
     public handleDono(channel: string,  streamInfo: any, username: string, amount: string) {
         const client = this.hoagieClients[channel.toLowerCase()];
         if (client && streamInfo) {
-            const amountNum = parseInt(amount);
+            const amountNum = parseFloat(amount);
             client.addDono(username?.toLowerCase(), "dono", amountNum)
         }
     }
