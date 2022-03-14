@@ -5,7 +5,10 @@ const regexes: Record<string, any> = {
     thesongery: /(?<username>\S+).+\$(?<amount>[0-9]+\.[0-9]+)/,
 
     // DONO ARIGATO! {user} just dono'd {currency}{amount} PogChamp
-    andrewcore: /DONO ARIGATO! (?<username>\S+).+\$(?<amount>[0-9]+\.[0-9]+)/
+    andrewcore: /DONO ARIGATO! (?<username>\S+).+\$(?<amount>[0-9]+\.[0-9]+)/,
+
+    // Thanks similiar_ for the $50.00!
+    andythefrenchy: /Thanks (?<username>\S+).+\$(?<amount>[0-9]+\.[0-9]+)/
 }
 
 export default class StreamElements {
