@@ -15,6 +15,8 @@ export default class TwitchDonoWatcher {
     donoTracker: DonoTracker = new DonoTracker(this.hoagieClients);
     historyWritten = new Set<string>();
 
+    connected: boolean = false;
+
     constructor() {
     }
 
@@ -104,14 +106,17 @@ export default class TwitchDonoWatcher {
 
                 client.on("connected", (address, port) => {
                     console.log("connected");
+                    this.connected = true;
                 });
-                client.on("disconnected", (reason) => {
+                client.on("disconnected", async (reason) => {
                     console.log({ disconnected: reason });
+                    this.connected = false;
                 })
                 client.connect();
 
                 while(true) {
                     await this.sleep(5000);
+                    this.reconnect(client);
                 }
 
             } catch (err) {
@@ -119,6 +124,12 @@ export default class TwitchDonoWatcher {
                 await this.sleep(10000);
                 console.log("trying again");
             }
+        }
+    }
+
+    private async reconnect(client: tmi.Client) {
+        if (!this.connected) {
+            client.connect();
         }
     }
 
