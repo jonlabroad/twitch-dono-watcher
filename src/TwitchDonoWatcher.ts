@@ -110,6 +110,10 @@ export default class TwitchDonoWatcher {
                 })
                 client.connect();
 
+                while(true) {
+                    await this.sleep(5000);
+                }
+
             } catch (err) {
                 console.error(err);
                 await this.sleep(10000);
