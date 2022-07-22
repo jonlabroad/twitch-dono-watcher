@@ -51,7 +51,6 @@ export default class TwitchDonoWatcher {
             const self = this;
 
             setInterval(() => {
-                console.log(".");
                 if (!this.connected) {
                     console.log("Trying to reconnect...");
                     client.connect()
