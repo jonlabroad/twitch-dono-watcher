@@ -1,5 +1,6 @@
 const regexes: Record<string, any> = {
-    joplaysviolin: /. (?<username>.+) just tipped \$(?<amount>.+)\!/,
+    // HoagieMan5000 just tipped $19.00 PogChamp
+    joplaysviolin: /[^a-zA-z]*(?<username>.+) just tipped \$(?<amount>[0-9]+\.[0-9]+)/,
     
     // HoagieMan5000 just tipped $36.37 THANK YOU :green_heart: :dizzy:
     thesongery: /(?<username>\S+).+\$(?<amount>[0-9]+\.[0-9]+)/,
