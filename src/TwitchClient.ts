@@ -14,6 +14,7 @@ export default class TwitchClient {
     cache: NodeCache;
     authToken: {
         access_token: string;
+        expires_in: number;
     } | undefined;
 
     constructor() {
@@ -21,15 +22,31 @@ export default class TwitchClient {
     }
 
     async getAuthToken() {
-        const clientSecret = Secrets.getInstance().secrets.twitchClientSecret;
         if (!this.authToken) {
-            console.log(`https://id.twitch.tv/oauth2/token?client_id=${Config.clientId}&client_secret=${clientSecret}&grant_type=client_credentials`);
-            const response = await axios.post(`https://id.twitch.tv/oauth2/token?client_id=${Config.clientId}&client_secret=${clientSecret}&grant_type=client_credentials`);
-            if (response.status === 200 && response.data) {
-                this.authToken = response.data;
-            }
+            await this.refreshAuthToken()
         }
+        await this.validateAndRefreshToken();
         return this.authToken;
+    }
+
+    async refreshAuthToken() {
+        const clientSecret = Secrets.getInstance().secrets.twitchClientSecret;
+        console.log(`https://id.twitch.tv/oauth2/token?client_id=${Config.clientId}&client_secret=${clientSecret}&grant_type=client_credentials`);
+        const response = await axios.post(`https://id.twitch.tv/oauth2/token?client_id=${Config.clientId}&client_secret=${clientSecret}&grant_type=client_credentials`);
+        if (response.status === 200 && response.data) {
+            this.authToken = response.data;
+            console.log(`Got token, expires in: ${this.authToken?.expires_in}`)
+        } 
+    }
+
+    async validateAndRefreshToken() {
+        const request = "https://id.twitch.tv/oauth2/validate"
+        try {
+            const response = await this.getRequest(request, false)
+        } catch (err) {
+            console.log("Token no longer valid, refreshing...")
+            await this.refreshAuthToken
+        }
     }
 
     async getUsers(usernames: string[]): Promise<UserData[]> {
