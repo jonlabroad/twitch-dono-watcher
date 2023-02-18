@@ -138,7 +138,7 @@ export default class TwitchDonoWatcher {
             client.connect();
         } catch (err) {
             console.error(err);
-            setTimeout(() => this.run(), 10000);
+            throw err
         }
     }
 
