@@ -20,7 +20,7 @@ export default class DonoTracker {
         const client = this.hoagieClients[channel.toLowerCase()];
         if (client && streamInfo) {
             const amountNum = parseFloat(amount);
-            client.addDono(username?.toLowerCase(), "dono", amountNum)
+            client.addDono(username?.toLowerCase().trim(), "dono", amountNum)
         }
     }
 
@@ -30,21 +30,21 @@ export default class DonoTracker {
         if (client && streamInfo) {
             const bits = parseInt(userstate.bits ?? 0);
             console.log({bits});
-            client.addDono(userstate.username?.toLowerCase(), "cheer", userstate.bits ?? 0)
+            client.addDono(userstate.username?.toLowerCase().trim(), "cheer", userstate.bits ?? 0)
         }
     }
 
     public handleSub(channel: string, streamInfo: any, username: string, method: tmi.SubMethod) {
         const client = this.hoagieClients[channel.toLowerCase()];
         if (client && streamInfo) {
-            client.addDono(username.toLowerCase(), "sub", 1, subMethodToTier[method])
+            client.addDono(username.toLowerCase().trim(), "sub", 1, subMethodToTier[method])
         } 
     }
 
     public handleSubGifts(channel: string, streamInfo: any, username: string, method: tmi.SubMethod) {
         const client = this.hoagieClients[channel.toLowerCase()];
         if (client && streamInfo) {
-            client.addDono(username.toLowerCase(), "subgift", 1, subMethodToTier[method])
+            client.addDono(username.toLowerCase().trim(), "subgift", 1, subMethodToTier[method])
         } 
     }
 }
