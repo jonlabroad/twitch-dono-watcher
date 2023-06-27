@@ -3,7 +3,7 @@ import axios from "axios";
 export interface SetDonoRequest {
     streamerLogin: string
     userLogin: string
-    type: "cheer" | "dono" | "sub" | "subgift"
+    type: "cheer" | "dono" | "sub" | "subgift" | "hypechat"
     amount: number
     tier?: number
 }
@@ -16,7 +16,7 @@ export default class HoagieClient {
         this.channel = channel;
     }
 
-    public async addDono(username: string, type: "cheer" | "dono" | "sub" | "subgift", amount: number, subTier?: number) {
+    public async addDono(username: string, type: "cheer" | "dono" | "sub" | "subgift" | "hypechat", amount: number, subTier?: number) {
         try {
             const body: SetDonoRequest = {
                 streamerLogin: this.channel,

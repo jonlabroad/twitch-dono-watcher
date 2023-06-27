@@ -5,6 +5,7 @@ import HoagieDbClient from "./HoagieDbClient";
 import Secrets from "./Secrets";
 import StreamElements from "./StreamElements";
 import TwitchClient from "./TwitchClient";
+import { HypeChat } from "./HypeChat";
 
 export default class TwitchDonoWatcher {
     channels: string[] = [];
@@ -58,7 +59,7 @@ export default class TwitchDonoWatcher {
             }, 1000);
 
             client.on("message", (channel, userstate, message, selfBool) => {
-
+                const channelName = channel.toLowerCase().replace("#", "");
                 // Look for streamlabs/streamelements dono messages (different for all channels)
                 if (userstate["display-name"]?.toLowerCase() === "streamlabs" || userstate["display-name"]?.toLowerCase() === "streamelements" || userstate["display-name"]?.toLowerCase() === "corebot5000") {
                     if (message.includes("$")) {
@@ -70,7 +71,6 @@ export default class TwitchDonoWatcher {
 
                                 const username = matches?.groups?.username;
                                 const amount = matches?.groups?.amount;
-                                const channelName = channel.toLowerCase().replace("#", "");
                                 if (username && amount) {
                                     self.donoTracker.handleDono(channelName, self.streamInfo[channelName], username, amount);
                                 }
@@ -78,6 +78,13 @@ export default class TwitchDonoWatcher {
                         } catch (err) {
                             console.error(err);
                         }
+                    }
+                }
+
+                if (HypeChat.isHypeChat(userstate)) {
+                    const hypeChat = HypeChat.parseHypeChat(userstate);
+                    if (hypeChat) {
+                        self.donoTracker.handleHypeChat(channelName, self.streamInfo[channelName], hypeChat.username, hypeChat.amount);
                     }
                 }
             });

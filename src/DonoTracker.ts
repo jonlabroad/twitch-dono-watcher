@@ -24,12 +24,16 @@ export default class DonoTracker {
         }
     }
 
+    public handleHypeChat(channel: string, streamInfo: any, username: string, amount: number) {
+        const client = this.hoagieClients[channel.toLowerCase()];
+        if (client && streamInfo) {
+            client.addDono(username.toLowerCase().trim(), "hypechat", amount);
+        }
+    }
+
     public handleCheer(channel: string, streamInfo: any, userstate: tmi.Userstate) {
         const client = this.hoagieClients[channel.toLowerCase()];
-        console.log({userstate});
         if (client && streamInfo) {
-            const bits = parseInt(userstate.bits ?? 0);
-            console.log({bits});
             client.addDono(userstate.username?.toLowerCase().trim(), "cheer", userstate.bits ?? 0)
         }
     }
